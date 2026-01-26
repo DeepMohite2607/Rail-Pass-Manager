@@ -1,3 +1,4 @@
+import "react-native-get-random-values";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Alert, Pressable, Image, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
