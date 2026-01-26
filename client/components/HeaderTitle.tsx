@@ -16,7 +16,9 @@ export function HeaderTitle({ title }: HeaderTitleProps) {
         style={styles.icon}
         resizeMode="contain"
       />
-      <ThemedText style={styles.title}>{title}</ThemedText>
+      <ThemedText style={styles.title} numberOfLines={1}>
+        {title}
+      </ThemedText>
     </View>
   );
 }
@@ -26,14 +28,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
+    maxWidth: 250,
   },
   icon: {
     width: 28,
     height: 28,
     marginRight: Spacing.sm,
+    borderRadius: 6,
   },
   title: {
     fontSize: 17,
     fontWeight: "600",
+    flexShrink: 1,
   },
 });
