@@ -62,7 +62,7 @@ export const AuthStorage = {
   async clearAll(): Promise<void> {
     await this.removeToken();
     await this.removeUser();
-    await AsyncStorage.removeItem(STORAGE_KEYS.APPLICATIONS);
+    // Note: We don't clear applications here so admin can see student submissions
     await AsyncStorage.removeItem(STORAGE_KEYS.DRAFT_APPLICATION);
   },
 };

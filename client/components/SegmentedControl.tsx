@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Pressable, StyleSheet, ViewStyle } from "react-native";
+import React, { useState } from "react";
+import { View, Pressable, StyleSheet, ViewStyle, LayoutChangeEvent } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -22,40 +22,47 @@ export function SegmentedControl<T extends string>({
   style,
 }: SegmentedControlProps<T>) {
   const { theme } = useTheme();
+  const [containerWidth, setContainerWidth] = useState(0);
   const selectedIndex = options.findIndex((o) => o.value === value);
+  
+  const segmentWidth = containerWidth > 0 ? (containerWidth - Spacing.xs * 2) / options.length : 0;
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    setContainerWidth(event.nativeEvent.layout.width);
+  };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateX: withSpring(
-            selectedIndex * (100 / options.length) + "%",
-            { damping: 15 }
-          ),
+          translateX: withSpring(selectedIndex * segmentWidth, { damping: 15, stiffness: 150 }),
         },
       ],
     };
-  });
+  }, [selectedIndex, segmentWidth]);
 
   return (
     <View
+      onLayout={handleLayout}
       style={[
         styles.container,
         { backgroundColor: theme.backgroundSecondary },
         style,
       ]}
     >
-      <Animated.View
-        style={[
-          styles.indicator,
-          {
-            width: `${100 / options.length}%` as any,
-            backgroundColor: theme.backgroundDefault,
-          },
-          animatedStyle,
-        ]}
-      />
-      {options.map((option, index) => (
+      {containerWidth > 0 ? (
+        <Animated.View
+          style={[
+            styles.indicator,
+            {
+              width: segmentWidth,
+              backgroundColor: theme.backgroundDefault,
+            },
+            animatedStyle,
+          ]}
+        />
+      ) : null}
+      {options.map((option) => (
         <Pressable
           key={option.value}
           onPress={() => onChange(option.value)}
