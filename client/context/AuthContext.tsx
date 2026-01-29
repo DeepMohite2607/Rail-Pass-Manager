@@ -1,3 +1,4 @@
+import "react-native-get-random-values";
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { User, UserRole } from "@/types";
 import { AuthStorage } from "@/lib/storage";
@@ -87,8 +88,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         phone: "",
         email,
         role: pendingRole,
-        fullName: "",
-        profileComplete: false,
+        fullName: pendingRole !== "student" ? "Admin User" : "",
+        profileComplete: pendingRole !== "student",
         createdAt: new Date().toISOString(),
       };
 
@@ -106,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await AuthStorage.clearAll();
       setUser(null);
+      setPendingRole("student");
     } catch (error) {
       console.error("Logout failed:", error);
     }
