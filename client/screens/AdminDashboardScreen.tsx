@@ -80,7 +80,7 @@ export default function AdminDashboardScreen() {
         {
           text: "Reject",
           style: "destructive",
-          onPress: async (reason: string | undefined) => {
+          onPress: async (reason) => {
             try {
               await ApplicationStorage.updateApplication(application.id, {
                 status: "rejected",
